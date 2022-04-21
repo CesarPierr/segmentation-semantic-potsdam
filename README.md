@@ -15,7 +15,7 @@ Par essais et erreurs, nous avons modifié les variables globales de l'entraîne
 
 ## Analyse des résultats
 ### Performances
-La précision du réseau sur l'ensemble de test est de 86.5%. Cela en fait un très bon score surtout au vu de l'evolution de celui-ci lors de nos premier tests (les premiers scores avec une architecture "maison" etaient de 20/30%)
+La précision du réseau sur l'ensemble de test est de 87.2%. Cela en fait un très bon score surtout au vu de l'evolution de celui-ci lors de nos premier tests (les premiers scores avec une architecture "maison" etaient de 20/30%)
 Analysons maintenant les erreurs de notre modèle
 
 ### Analyse des erreurs

@@ -1,4 +1,8 @@
 # Segmentation sémantique d'images aériennes
+
+Ce projet consistait à developper un modele de machine learning (reseaux de convolutions ici) afin de faire de la Segmentation semantique sur un recueil d'images de la ville de Potsdam. Les parties de l'image étaient elles deja classées selon 4 catégories : routes, batiments, nature, autre. 
+
+Le but etait donc de retrouver cette classification avec les images satellites seulement.
 ## Pierre César & Bastien Gless
 
 ## Comment utiliser le notebook

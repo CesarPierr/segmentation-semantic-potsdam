@@ -1,37 +1,77 @@
-# Segmentation sémantique d'images aériennes
+# Semantic Segmentation of Aerial Images
 
-Ce projet consistait à developper un modele de machine learning (reseaux de convolutions ici) afin de faire de la Segmentation semantique sur un recueil d'images de la ville de Potsdam. Les parties de l'image étaient elles deja classées selon 4 catégories : routes, batiments, nature, autre. 
+## Overview
+This project implements a deep learning model based on convolutional neural networks (CNN) to perform semantic segmentation on aerial images of Potsdam city. The model classifies different areas of the images into four categories:
+- Buildings
+- Roads
+- Vegetation
+- Other
 
-Le but etait donc de retrouver cette classification avec les images satellites seulement.
-## Pierre César & Bastien Gless
 
-## Comment utiliser le notebook
-Nous avons réutilisé le notebook fourni pour le projet.
-Pour visualiser les résultats sans avoir à réentraîner le modèle entier, nous avons écrit la section "Test du dernier modèle enregistré". Elle utilise un modèle entraîné que nous avons enregistré auparavant.
-Pour utiliser cette fonctionnalité, il faut avoir dans Drive le dossier "potsdam/models", contenant les fichiers "modele_.h5" (les données se situant dans le dossier "potsdam/Potsdam-data/Potsdam/30cm"). Un réglage de l'arborescence par l'utilisateur en fonction de sa propre arborescence pourrait être nécessaire.
+## Model Architecture
+The project uses the U-Net architecture, a specialized convolutional neural network designed for biomedical image segmentation. We chose this proven architecture due to its effectiveness in semantic segmentation tasks. For more information about U-Net, visit the [official documentation](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/).
 
-## Choix de l'architecture de réseau
-On utilise la structure de réseau de neurones U-net, dont la documentation se trouve ici : https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/ Ce réseau de convolution a été utilisé initialement pour des applications de segmentation sémantique dans le milieu biomédical. Il nous a paru sensé de prendre cette architecture existante pour notre réseau de neurones, car n'ayant pas d'expérience dans le domaine nous voulions opter pour une valeur sûre.
+## Getting Started
 
-## Entraînement
-L'entraînement du réseau prend entre 20min et une heure en fonction de la machine de l'utilisateur.
-Par essais et erreurs, nous avons modifié les variables globales de l'entraînement (BATCH_SIZE, WINDOW_SIZE, OVERLAP, LENGTH_EPOCH), jusqu'à avoir un résultat satisfaisant, néanmoins on remarque que l'overlap (le recouvrement lors de la subdivision en image de taille plus petites) et le nombre d'epoch influe beaucoup sur la precision finale. De plus, le pas de gradient est lui aussi adaptable afin de converger plus rapidement au debut puis affiner le modèle lorsque l'erreur n'est plus très importante.
+### Prerequisites
+- Google Drive access
+- Python environment with deep learning libraries
+- Dataset folder structure:
+  ```
+  potsdam/
+  ├── models/
+  │   └── modele_.h5
+  └── Potsdam-data/
+      └── Potsdam/
+          └── 30cm/
+  ```
 
-## Analyse des résultats
-### Performances
-La précision du réseau sur l'ensemble de test est de 87.2%. Cela en fait un très bon score surtout au vu de l'evolution de celui-ci lors de nos premier tests (les premiers scores avec une architecture "maison" etaient de 20/30%)
-Analysons maintenant les erreurs de notre modèle
+### Using the Notebook
+1. The notebook includes a "Test the last saved model" section for quick results visualization
+2. This section uses a pre-trained model to avoid full retraining
+3. Make sure to adjust the file paths according to your directory structure
 
-### Analyse des erreurs
-La plupart des points où notre modèle se trompe correspondent à l'une des deux situations suivantes:
-- Les frontières entre les zones de classes différentes, comme on pouvait s'en douter. Toutefois, ces frontières sont fines.
-- Les zones classifiées en "autres". Sémantiquement, cette classe est différente des trois autres (bâtiments, routes, végétations), dans le sens où par définition elle ne porte pas de signification détectable et apprenable par le réseau. Il arrive donc que des zones de classe "autre" soient mal classifiées par notre modèle, et plus rarement que le modèle classifie certaines zones en "autre" alors qu'elles ne le sont pas.
-Si notre modèle avait des applications réelles, nous pensons que ces erreurs seraient peu critiques : les routes et bâtiments sont bien détectés, cela ne poserait pas de problème pour des questions de sécurité.
+## Training Details
 
-## pistes d'ameliorations
+### Configuration
+The model's performance can be tuned using several global variables:
+- `BATCH_SIZE`: Number of images processed in each training step
+- `WINDOW_SIZE`: Size of image subdivisions
+- `OVERLAP`: Overlap between subdivisions
+- `LENGTH_EPOCH`: Number of training epochs
 
-Il est bien sur possible d'ameliorer le modèle en place. 
-Les pistes de cette amélioration sont :
+### Performance
+- Training time: 20-60 minutes depending on hardware
+- Test set accuracy: 87.2%
+- Gradient steps are adaptively adjusted for optimal convergence
 
-* appliquer des transformations sur le dataset de base afin de faire encore grossir la base de donnée
-* utiliser des données complementaires comme la hauteur des batiments
+## Results Analysis
+
+### Model Performance
+The current accuracy of 87.2% represents a significant improvement over initial tests with custom architectures (which achieved 20-30% accuracy).
+
+### Error Analysis
+The model's mistakes typically occur in two scenarios:
+
+1. Boundary Regions
+   - Thin areas between different classification zones
+   - Generally minimal impact on overall results
+
+2. "Other" Category Classification
+   - Less semantically distinct than main categories
+   - Occasional misclassification of undefined areas
+   - Rare false positives in "other" category
+
+### Practical Impact
+The current error patterns have minimal impact on practical applications, as the model maintains high accuracy in identifying critical features (buildings and roads).
+
+## Future Improvements
+
+### Potential Enhancements
+1. Data Augmentation
+   - Apply transformations to expand the training dataset
+   - Increase variety in training examples
+
+2. Additional Features
+   - Incorporate building height data
+   - Add complementary data sources
